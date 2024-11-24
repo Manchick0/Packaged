@@ -41,3 +41,27 @@ public static void main(String[] args) {
     }
 }
 ```
+
+### Using Requests
+
+While the `GET` method is undoubtedly the most essential one, Packaged allows you to use any other one. Let's take a look at how you might send a more advanced request, such as a `POST` one.
+
+The main concept behind constructing requests is using the `Request.Builder` class. Remember how I quickly mentioned that although only one `fetch` method exists, it's overloaded (And **a lot** in fact). Well, it's time to take a look at its other two overloads - one takes in a `Request` object, the other one is more of a utility one - it takes in a `Request.Builder` and immediately delegates to the `Request` overload, by calling the `build` method on the builder. What it essentially means is that you don't actually need to call the `build` method yourself if you're constructing the request in-line.
+
+Creating the `Builder` itself is also a bit different from how it's usually done. You can call any method of the `Builder` class on the `Request` class itself, which will then return a `Builder`. (e.g. calling `Request.method();` is the same as calling `new Request.Builder().method();`, though the second option wouldn't work since the constructor is private.)
+
+```java
+public static void main(String[] args) {
+    var entry = """
+            {
+                "title": "Updated title",
+                "completed": true
+            }
+            """;
+    var response = Packaged.fetch("https://jsonplaceholder.typicode.com/posts/", Request.method("POST").json(entry)).join();
+    if (response.ok) {
+        var json = response.parse(body -> new Gson().fromJson(body, Map.class));
+        System.out.println(json);
+    }
+}
+```
