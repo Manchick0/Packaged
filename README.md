@@ -1,5 +1,5 @@
 # Packaged
-Sending simple HTTP requests hasn't ever been so easy.
+Simplify HTTP requests, the way they should be.
 
 Java's verbosity often feels cumbersome, especially when it comes to tasks so essential, you'd expect them to be perfect. One such case is **HTTP requests**. Most of the time, your task is as simple as fetching some data from the web. Don't you wish the process were simpler? **Packaged** aims to abstract out all the complexity of HTTP requests by providing convenient methods that not only feel modern but also help your workflow.
 
@@ -30,7 +30,7 @@ public static void main(String[] args) {
 
 Just like that we send a **GET** request to [a website](https://example.com), await the result, and if the response is `ok`, print it to the console. Simple, yet effective!
 
-The `Response#text` method we used returns the body of the response of a literal string. As you can already tell, this is **not** something you'd want to do often. You'd rather want to deserialize the body into some sort of object that you can work with. Luckily, `Response` has us covered with its `parse` method. It takes in a `Function` of type `<String, T>` and returns whatever the function does (`T`). This is similar to the `json` method in JS, but a lot more generic due to the absence of a built-in JSON library in Java. You can however use a third-party library, such as [Gson](https://github.com/google/gson), to deserialize the string.
+The `Response#text` method we used returns the body of the response as a literal string. As you can already tell, this is **not** something you'd want to do often. You'd rather want to deserialize the body into some sort of object that you can work with. Luckily, `Response` has us covered with its `parse` method. It takes in a `Function` of type `<String, T>` and returns whatever the function does (`T`). This is similar to the `json` method in JS, but a lot more generic due to the absence of a built-in JSON library in Java. You can however use a third-party library, such as [Gson](https://github.com/google/gson), to deserialize the string.
 
 ```java
 public static void main(String[] args) {
