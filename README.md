@@ -42,13 +42,14 @@ public static void main(String[] args) {
 }
 ```
 
-### Using Requests
+## Using Requests
 
 While the `GET` method is undoubtedly the most essential one, Packaged allows you to use any other one. Let's take a look at how you might send a more advanced request, such as a `POST` one.
 
 The main concept behind constructing requests is using the `Request.Builder` class. Remember how I quickly mentioned that although only one `fetch` method exists, it's overloaded (And **a lot** in fact). Well, it's time to take a look at its other two overloads - one takes in a `Request` object, the other one is more of a utility one - it takes in a `Request.Builder` and immediately delegates to the `Request` overload, by calling the `build` method on the builder. What it essentially means is that you don't need to call the `build` method yourself if you're constructing the request in-line.
 
-Creating the `Builder` itself is also a bit different from how it's usually done. You can call any method of the `Builder` class on the `Request` class itself, which will then return a `Builder`. (e.g. calling `Request.method();` is the same as calling `new Request.Builder().method();`, though the second option wouldn't work since the constructor is private.)
+> [!NOTE]
+> Creating the `Builder` itself is also a bit different from how it's usually done. You can call any method of the `Builder` class on the `Request` class itself, which will then return a `Builder`. (e.g. calling `Request.method();` is the same as calling `new Request.Builder().method();`, though the second option wouldn't work since the constructor is private.)
 
 ```java
 public static void main(String[] args) {
@@ -70,6 +71,18 @@ You might have noticed that we're using the `json` method to set the body of the
 
 To add a header to your request, simply use the `header` method or any of its overloads.
 
-### Working with the response
+## Working with the response
 
-While you're already familiar with the `text` and `parse` method of the `Response` class, it's worth taking a brief look on other methods and fields.
+While you're already familiar with the `text` and `parse` methods of the `Response` class, it's worth taking a brief look at other methods and fields. The most important ones are the `status` and the `ok` fields. The status code directly represents the status code of the response (e.g. 200, 404). The `ok` field is a shorthand for checking whether the status code falls anywhere between 2XX and 3XX, hence whether the response was successful.
+
+```
+public static void main(String[] args) {
+    var response = Packaged.fetch("https://jsonplaceholder.typicode.com/todos/1", Request.method("GET").acceptJson()).join();
+    if (response.ok) {
+        var json = response.parse(body -> new Gson().fromJson(body, Map.class));
+        System.out.println(json);
+    } else {
+        System.err.printf("%s: %s%n", response.status, response.statusText);
+    }
+}
+```
