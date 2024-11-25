@@ -1,7 +1,6 @@
 package com.manchick.packaged;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
  * The {@code Request} class represents an HTTP request with a specific method, headers, and body.

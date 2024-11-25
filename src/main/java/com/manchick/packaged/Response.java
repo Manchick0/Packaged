@@ -1,6 +1,7 @@
 package com.manchick.packaged;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -106,16 +107,27 @@ public class Response {
                     connection.getURL(),
                     connection.getHeaderFields().entrySet().stream()
                             .collect(Collectors.toMap(Map.Entry::getKey, e -> new HashSet<>(e.getValue()))));
-        } catch (UnknownHostException e) {
+        } catch (UnknownHostException | FileNotFoundException e) {
             return new Response((short) 404, "Unknown host", "", connection.getURL(), Map.of());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return new Response((short) 400, "Bad request", "", connection.getURL(), Map.of());
         }
     }
 
     @Override
     public String toString() {
-        return String.format("Response{status=%d, statusText=%s, ok=%b, url=%s, headers=%s}",
-                status, statusText, ok, url, Arrays.toString(headers.entrySet().toArray()));
+        return String.format("""
+                {
+                    "status": {
+                        "code": %s,
+                        "message": "%s",
+                        "ok": %s
+                    },
+                    "url": "%s",
+                    "body": "%s",
+                    "headers": %s
+                }
+                """, status, statusText, ok, url,
+                body.replace("\n", "").replace("\"", "\\\""), headers);
     }
 }
