@@ -75,7 +75,7 @@ To add a header to your request, simply use the `header` method or any of its ov
 
 While you're already familiar with the `text` and `parse` methods of the `Response` class, it's worth taking a brief look at other methods and fields. The most important ones are the `status` and the `ok` fields. The status code directly represents the status code of the response (e.g. 200, 404). The `ok` field is a shorthand for checking whether the status code falls anywhere between 2XX and 3XX, hence whether the response was successful.
 
-```
+```java
 public static void main(String[] args) {
     var response = Packaged.fetch("https://jsonplaceholder.typicode.com/todos/1", Request.method("GET").acceptJson()).join();
     if (response.ok) {
